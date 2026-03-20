@@ -3,6 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -15,10 +18,13 @@ import { AppService } from './app.service';
         type: configService.get<string>('DB_TYPE', 'sqlite') as any,
         database: configService.get<string>('DB_FILE', 'database.sqlite'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // Berbahaya untuk production, tapi oke untuk setup awal/dev
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    UsersModule,
+    AuthModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
